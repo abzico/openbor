@@ -3368,4 +3368,8 @@ void goto_mainmenu(int);
 extern s_savelevel   *savelevel;
 extern s_savescore    savescore;
 
+// dev.txt : configurable features suitable for developers
+extern bool is_dev_console_enabled;
+extern bool is_dev_showcreditsscreen;
+
 #endif

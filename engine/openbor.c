@@ -774,6 +774,14 @@ Script respawn_script[MAX_PLAYERS];   //player respawn scripts
 Script pdie_script[MAX_PLAYERS];      //player death scripts
 
 extern Script *pcurrentscript;//used by local script functions
+
+// dev.txt - console enabled or disabled
+#if WIN || LINUX || DARWIN
+bool is_dev_console_enabled = false;
+#endif
+
+bool is_dev_showcreditsscreen = true;
+static void load_dev_txt();
 //-------------------------methods-------------------------------
 
 void setDrawMethod(s_anim *a, ptrdiff_t index, s_drawmethod *m)
@@ -35776,6 +35784,10 @@ void startup()
         borShutdown(1, "Unable to set video mode: %d x %d!\n", videomodes.hRes, videomodes.vRes);
     }
 
+    printf("Loading dev.txt..............\t");
+    load_dev_txt();
+    printf("Done!\n");
+
     if(pixelformat == PIXEL_8)
     {
         standard_palette(1);
@@ -38174,6 +38186,71 @@ VIDEOMODES:
     }
 }
 
+/**
+ * Dev features setup i.e. load from dev.txt for console support, enable/disable credits screen,
+ * etc.
+ */
+void load_dev_txt()
+{
+    char *filename = "data/dev.txt";
+    int pos;
+    char *buf, *command;
+    size_t size;
+    ArgList arglist;
+    char argbuf[MAX_ARG_LEN + 1] = "";
+
+    // Read file
+    if(buffer_pakfile(filename, &buf, &size) != 1)
+    {
+        return;
+    }
+
+    // Now interpret the contents of buf line by line
+    pos = 0;
+    while(pos < size)
+    {
+        if(ParseArgs(&arglist, buf + pos, argbuf))
+        {
+            command = GET_ARG(0);
+            if(command && command[0])
+            {
+                if(stricmp(command, "console") == 0)
+                {
+                  is_dev_console_enabled = GET_INT_ARG(1);
+                  if (is_dev_console_enabled)
+                  {
+                    printf("\ndev console is enabled");
+                  }
+                  else
+                  {
+                    printf("\ndev console is disabled");
+                  }
+                }
+                else if (stricmp(command, "creditsscreen") == 0)
+                {
+                  is_dev_showcreditsscreen = GET_INT_ARG(1);
+                  if (is_dev_showcreditsscreen)
+                  {
+                    printf("\ndev creditsscreen=1");
+                  }
+                  else
+                  {
+                    printf("\ndev creditsscreen=0");
+                  }
+                }
+            }
+        }
+
+        // Go to next line
+        pos += getNewLineStart(buf + pos);
+    }
+
+    if(buf != NULL)
+    {
+        free(buf);
+        buf = NULL;
+    }
+}
 
 
 // ----------------------------------------------------------------------------
