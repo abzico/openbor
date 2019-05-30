@@ -778,6 +778,8 @@ extern Script *pcurrentscript;//used by local script functions
 // dev.txt - console enabled or disabled
 #if WIN || LINUX || DARWIN
 bool is_dev_console_enabled = false;
+extern bool is_dev_console_triggered;          // whether console key is triggered
+extern bool is_dev_console_shouldbe_visible;   // whether or not dev console should be visible now
 #endif
 
 bool is_dev_showcreditsscreen = true;
@@ -35784,14 +35786,14 @@ void startup()
         borShutdown(1, "Unable to set video mode: %d x %d!\n", videomodes.hRes, videomodes.vRes);
     }
 
-    printf("Loading dev.txt..............\t");
-    load_dev_txt();
-    printf("Done!\n");
-
     if(pixelformat == PIXEL_8)
     {
         standard_palette(1);
     }
+
+    printf("Loading dev.txt..............\t");
+    load_dev_txt();
+    printf("Done!\n");
 
     printf("Loading menu.txt.............\t");
     load_menu_txt();
