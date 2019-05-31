@@ -456,7 +456,7 @@ void devconsole_perframe_update()
     
     if (_devconsole)
     {
-      update(1, 0);
+      update(1, 1);
     }
 
     cursor_flash_counter++;
@@ -465,10 +465,6 @@ void devconsole_perframe_update()
       cursor_flash_counter = 0;
       cursor_on = !cursor_on;
     }
-
-    // note: added this to fix crash problem when switching back and forth between
-    // full screen and windowed mode rapidly
-    SDL_Delay(1);
 	}
 
   // end receiving text input from SDL2
