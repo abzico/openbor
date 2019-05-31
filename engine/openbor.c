@@ -17,6 +17,10 @@
 #include "translation.h"
 #include "soundmix.h"
 
+#if WIN || LINUX || DARWIN
+#include "devconsole.h"
+#endif
+
 #define NaN 0xAAAAAAAA
 
 static const char *E_OUT_OF_MEMORY = "Error: Could not allocate sufficient memory.\n";
@@ -548,6 +552,7 @@ s_loadingbar        loadingbg[2] = {{0, 0, {0, 0}, {0, 0}, 0, 0}, {0, 0, {0, 0},
 int					loadingmusic        = 0;
 int                 unlockbg            = 0;         			// If set to 1, will look for a different background image after defeating the game
 int                 _pause              = 0;
+bool                _devconsole         = false;       // flag checking whether it's in devconsole screen
 int                 goto_mainmenu_flag  = 0;
 int					nofadeout			= 0;
 int					nosave				= 0;
@@ -16253,6 +16258,9 @@ void pausemenu()
             sound_pause_sample(0);
             sound_play_sample(SAMPLE_BEEP2, 0, savedata.effectvol, savedata.effectvol, 100);
             pauselector = 0;
+
+            // reset state of devconsole, so no previous lines will appear in next session of game
+            devconsole_reset();
         }
         if(newkeys & FLAG_ESC)
         {
@@ -16261,6 +16269,9 @@ void pausemenu()
             sound_pause_sample(0);
             sound_play_sample(SAMPLE_BEEP2, 0, savedata.effectvol, savedata.effectvol, 100);
             pauselector = 0;
+
+            // reset state of devconsole, so no previous lines will appear in next session of game
+            devconsole_reset();
         }
         if(newkeys & FLAG_SCREENSHOT)
         {
@@ -35015,17 +35026,17 @@ void update(int ingame, int usevwait)
     int p_keys = 0;
 
     getinterval();
-    if(playrecstatus->status == A_REC_PLAY && !_pause && level) if ( !playRecordedInputs() ) stopRecordInputs();
+    if(playrecstatus->status == A_REC_PLAY && !_pause && level && !_devconsole) if ( !playRecordedInputs() ) stopRecordInputs();
     inputrefresh(playrecstatus->status);
-    if(playrecstatus->status == A_REC_REC && !_pause && level) if ( !recordInputs() ) stopRecordInputs();
+    if(playrecstatus->status == A_REC_REC && !_pause && level && !_devconsole) if ( !recordInputs() ) stopRecordInputs();
 
-    if ((!_pause && ingame == 1) || alwaysupdate)
+    if ((!_pause && !_devconsole && ingame == 1) || alwaysupdate)
     {
         execute_updatescripts();
     }
 
     newtime = 0;
-    if(!_pause)
+    if(!_pause && !_devconsole)
     {
         if(ingame == 1 || inScreen)
         {
@@ -35122,7 +35133,7 @@ void update(int ingame, int usevwait)
 
     clearscreen(vscreen);
 
-    if(ingame == 1 && !_pause)
+    if(ingame == 1 && !_pause && !_devconsole)
     {
         draw_scrolled_bg();
         if(level->type != 2)
@@ -35146,7 +35157,7 @@ void update(int ingame, int usevwait)
 
     // entity sprites queueing
     if(ingame == 1 || inScreen)
-        if(!_pause)
+        if(!_pause && !_devconsole)
         {
             display_ents();
         }
@@ -35173,7 +35184,7 @@ void update(int ingame, int usevwait)
              (player[2].ent && (player[2].newkeys & FLAG_START)) ||
              (player[3].ent && (player[3].newkeys & FLAG_START)))
       )*/
-    if(ingame == 1 && !_pause && !nopause && p_keys)
+    if(ingame == 1 && !_pause && !_devconsole && !nopause && p_keys)
     {
         if ( !(goto_mainmenu_flag&1) )
         {
@@ -35189,6 +35200,29 @@ void update(int ingame, int usevwait)
         backto_mainmenu();
         return;
     }
+
+#if WIN || LINUX || DARWIN
+    // activate in-game console only for PC platform
+    if ( ingame == 1 && 
+        !_pause && 
+        !nopause && 
+        !_devconsole && 
+        is_dev_console_triggered &&
+        is_dev_console_shouldbe_visible )
+    {
+      printf("show dev's console\n");
+      sound_pause_music(1);
+      sound_pause_sample(1);
+      sound_play_sample(SAMPLE_PAUSE, 0, savedata.effectvol, savedata.effectvol, 100);
+
+      is_dev_console_triggered = false;
+      _devconsole = true;
+
+      // time to trigger update loop
+      devconsole_perframe_update();
+      return;
+    }
+#endif
 
     /********** update screen **************/
 
@@ -35503,6 +35537,24 @@ void borShutdown(int status, char *msg, ...)
         enginecreditsScreen = 0; //once the engine credits is done, disable flag.
         term_videomodes();
     }
+
+#if WIN || LINUX || DARWIN
+    if (!disablelog)
+    {
+      printf("Release dev data");
+    }
+    if (startup_done)
+    {
+      if (is_dev_console_enabled)
+      {
+        devconsole_shutdown();
+      }
+    }
+    if (!disablelog)
+    {
+      printf("...........\n");
+    }
+#endif
 
     if(!disablelog)
     {
@@ -38219,26 +38271,35 @@ void load_dev_txt()
                 if(stricmp(command, "console") == 0)
                 {
                   is_dev_console_enabled = GET_INT_ARG(1);
+#ifdef DEBUG
                   if (is_dev_console_enabled)
                   {
-                    printf("\ndev console is enabled");
+                    fprintf(stdout, "dev console is enabled\n");
+                    // init devconsole once as users intended to use it
+                    devconsole_init();
                   }
                   else
                   {
-                    printf("\ndev console is disabled");
+                    fprintf(stdout, "dev console is disabled\n");
                   }
+#else
+                  // init devconsole once as users intended to use it
+                  devconsole_init();
+#endif
                 }
                 else if (stricmp(command, "creditsscreen") == 0)
                 {
                   is_dev_showcreditsscreen = GET_INT_ARG(1);
+#ifdef DEBUG
                   if (is_dev_showcreditsscreen)
                   {
-                    printf("\ndev creditsscreen=1");
+                    fprintf(stdout, "dev creditsscreen=1\n");
                   }
                   else
                   {
-                    printf("\ndev creditsscreen=0");
+                    fprintf(stdout, "dev creditsscreen=0\n");
                   }
+#endif
                 }
             }
         }

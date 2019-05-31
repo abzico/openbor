@@ -304,7 +304,8 @@ GAME	        = source/gamelib/draw.o                                            
                   source/gamelib/spritex8p16.o                                                      \
                   source/gamelib/spritex8p32.o                                                      \
                   source/gamelib/models.o                                                           \
-                  source/gamelib/transform.o
+                  source/gamelib/transform.o							    \
+		  source/gamelib/devconsole.o
 SCRIPT          = source/scriptlib/StackedSymbolTable.o                                             \
                   source/scriptlib/ScriptVariant.o                                                  \
                   source/scriptlib/SymbolTable.o                                                    \
