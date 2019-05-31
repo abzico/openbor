@@ -383,7 +383,7 @@ bool devconsole_control_update(Uint8 *keystate, const SDL_Event event)
 void devconsole_perframe_update()
 {
 	int quit = 0;
-	s_screen *gamebuffer = allocscreen(videomodes.hRes, videomodes.vRes, PIXEL_32);
+	s_screen *gamebuffer = allocscreen(videomodes.hRes, videomodes.vRes/2, PIXEL_32);
 
   int color_black = _makecolour(0, 0, 0);
 
