@@ -14733,7 +14733,7 @@ void generate_basemap(int map_index, float rx, float rz, float x_size, float z_s
 	return;
 }
 
-void load_level(char *filename)
+bool load_level(char *filename, bool hardfail)
 {
     char *buf = NULL;
     size_t size, len, sblen;
@@ -14776,8 +14776,6 @@ void load_level(char *filename)
     unload_level();
 
     printf("Level Loading:   '%s'\n", filename);
-
-
 
     getRamStatus(BYTES);
 
@@ -16018,10 +16016,16 @@ lCleanup:
         free(scriptbuf);
     }
 
+    // if there's error occurs, error message will be set
     if(errormessage)
     {
+      if (hardfail)
         borShutdown(1, "ERROR: load_level, file %s, line %d, message: %s", filename, line, errormessage);
+      else
+        return false;
     }
+
+    return true;
 }
 
 
@@ -36566,7 +36570,7 @@ int playlevel(char *filename)
 
     savelevelinfo(); // just in case we lose them after level is freed
 
-    load_level(filename);
+    load_level(filename, true);
 
     if(!nosave)
     {

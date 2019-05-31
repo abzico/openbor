@@ -3074,7 +3074,18 @@ int load_models();
 void unload_levelorder();
 void load_levelorder();
 void unload_level();
-void load_level(char *filename);
+
+/**
+ * Load level from filename
+ *
+ * \param filename filename of level to load
+ * \param hardfail true to call borShutdown() when error occurs, otherwise not crash.
+ *                 If you expect to handle returned value from this function, then better set it to
+ *                 false. Anyway if set to true, it still return false but not guaruntee users will
+ *                 have enough time to handle it. Default is true.
+ * \return true if loading is successful, otherwise return false.
+ */
+bool load_level(char *filename, bool hardfail);
 void drawlifebar(int x, int y, int h, int maxh);
 void drawmpbar(int x, int y, int m, int maxm);
 void update_loading(s_loadingbar *s,  int value, int max);
