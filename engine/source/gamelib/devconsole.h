@@ -18,9 +18,10 @@
  */
 extern bool is_dev_console_triggered;
 extern bool is_dev_console_shouldbe_visible;
+extern bool is_dev_console_prevframe_update_bypass;
 #define DEVCONSOLE_MAX_CHAR_INPUT 95
 // TODO: probably prevent this definition at compile time if users don't need it
-char dev_console_inputstr[DEVCONSOLE_MAX_CHAR_INPUT];
+extern char dev_console_inputstr[DEVCONSOLE_MAX_CHAR_INPUT];
 
 /**
  * Detect and handle key control

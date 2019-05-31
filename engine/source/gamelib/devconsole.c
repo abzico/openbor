@@ -15,14 +15,11 @@ extern int SAMPLE_PAUSE;                      // use pause sample sfx when dev c
 /* from openbor.c/.h */
 extern bool is_dev_console_enabled;       // is_dev_console_enabled
 
-/* from control.h */
-extern bool is_dev_console_triggered;         // whether key combination for dev console triggered  
-extern bool is_dev_console_shouldbe_visible;  // flag whether dev console shouldbe visible
-extern char dev_console_inputstr[DEVCONSOLE_MAX_CHAR_INPUT];  // input string from prompt
-
 /* global variables */
 bool is_dev_console_triggered = false;
 bool is_dev_console_shouldbe_visible = false;
+bool is_dev_console_prevframe_update_bypass = false;
+char dev_console_inputstr[DEVCONSOLE_MAX_CHAR_INPUT];
 
 /* internal variables */
 #define LINE_BUFFER 512                       // each line can contain at max number of characters
