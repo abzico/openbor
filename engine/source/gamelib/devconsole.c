@@ -302,12 +302,45 @@ bool devconsole_control_update(Uint8 *keystate, const SDL_Event event)
           if(command && command[0])
           {
             // TODO: add more commands to support here
+            // get version information of this engine as it's running
             if(stricmp(command, "version") == 0)
             {
               char buf[LINE_BUFFER];
               snprintf(buf, LINE_BUFFER, "OpenBOR v.%s.%s Build %d (%s)", VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD_INT, VERSION_COMMIT);
 
               add_to_histline(buf);
+            }
+            // play in specified level
+            // TODO: fix this level loading command, it isn't complete and not all things are working
+            // properly yet i.e. walking limit of stage, decoration objects are not spawned etc
+            else if (stricmp(command, "level") == 0)
+            {
+              if (arglist.count < 2)
+              {
+                add_to_histline("usage: level <level-filename>");
+              }
+              else
+              {
+                is_dev_console_triggered = false;
+
+                // clear queued sprites in rendering
+                spriteq_unlock();
+                spriteq_clear();
+
+#ifdef DEBUG
+                fprintf(stdout, "programmatically hide dev's console to keep state consistent\n");
+#endif
+
+                is_dev_console_triggered = false;
+                is_dev_console_shouldbe_visible = false;
+                _devconsole = false;
+
+                sound_pause_music(0);
+                sound_pause_sample(0);
+                sound_play_sample(SAMPLE_PAUSE, 0, savedata.effectvol, savedata.effectvol, 100);
+
+                playlevel(GET_ARG(1));
+              }
             }
           }
         }
