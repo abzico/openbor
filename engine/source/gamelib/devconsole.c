@@ -41,7 +41,7 @@ void devconsole_init()
     histlines[i] = NULL;
   }
 
-  color_gray = _makecolour(200, 200, 200);
+  color_gray = _makecolour(230, 230, 230);
 }
 
 void devconsole_shutdown()
