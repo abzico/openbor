@@ -18,7 +18,6 @@ extern bool is_dev_console_enabled;       // is_dev_console_enabled
 /* global variables */
 bool is_dev_console_triggered = false;
 bool is_dev_console_shouldbe_visible = false;
-bool is_dev_console_prevframe_update_bypass = false;
 char dev_console_inputstr[DEVCONSOLE_MAX_CHAR_INPUT];
 
 /* internal variables */

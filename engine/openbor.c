@@ -552,7 +552,9 @@ s_loadingbar        loadingbg[2] = {{0, 0, {0, 0}, {0, 0}, 0, 0}, {0, 0, {0, 0},
 int					loadingmusic        = 0;
 int                 unlockbg            = 0;         			// If set to 1, will look for a different background image after defeating the game
 int                 _pause              = 0;
+#if WIN || LINUX || DARWIN
 bool                _devconsole         = false;       // flag checking whether it's in devconsole screen
+#endif
 int                 goto_mainmenu_flag  = 0;
 int					nofadeout			= 0;
 int					nosave				= 0;
@@ -34572,6 +34574,12 @@ void inputrefresh(int playrecmode)
 
     control_update(playercontrolpointers, MAX_PLAYERS);
 
+#if WIN || LINUX || DARWIN
+    // ignore further player's key input when devconsole is shown
+    if (_devconsole)
+      return;
+#endif
+
     bothkeys = 0;
     bothnewkeys = 0;
 
@@ -35030,17 +35038,26 @@ void update(int ingame, int usevwait)
     int p_keys = 0;
 
     getinterval();
+#if WIN || LINUX || DARWIN
     if(playrecstatus->status == A_REC_PLAY && !_pause && level && !_devconsole) if ( !playRecordedInputs() ) stopRecordInputs();
+#else
+    if(playrecstatus->status == A_REC_PLAY && !_pause && level) if ( !playRecordedInputs() ) stopRecordInputs();
+#endif
     inputrefresh(playrecstatus->status);
-    if(playrecstatus->status == A_REC_REC && !_pause && level && !_devconsole) if ( !recordInputs() ) stopRecordInputs();
 
-    if ((!_pause && !_devconsole && ingame == 1) || alwaysupdate)
+#if WIN || LINUX || DARWIN
+    if(playrecstatus->status == A_REC_REC && !_pause && level && !_devconsole) if ( !recordInputs() ) stopRecordInputs();
+#else
+    if(playrecstatus->status == A_REC_REC && !_pause && level) if ( !recordInputs() ) stopRecordInputs();
+#endif
+
+    if ((!_pause && ingame == 1) || alwaysupdate)
     {
         execute_updatescripts();
     }
 
     newtime = 0;
-    if(!_pause && !_devconsole)
+    if(!_pause)
     {
         if(ingame == 1 || inScreen)
         {
@@ -35137,7 +35154,7 @@ void update(int ingame, int usevwait)
 
     clearscreen(vscreen);
 
-    if(ingame == 1 && !_pause && !_devconsole)
+    if(ingame == 1 && !_pause)
     {
         draw_scrolled_bg();
         if(level->type != 2)
@@ -35161,7 +35178,7 @@ void update(int ingame, int usevwait)
 
     // entity sprites queueing
     if(ingame == 1 || inScreen)
-        if(!_pause && !_devconsole)
+        if(!_pause)
         {
             display_ents();
         }
@@ -35188,7 +35205,11 @@ void update(int ingame, int usevwait)
              (player[2].ent && (player[2].newkeys & FLAG_START)) ||
              (player[3].ent && (player[3].newkeys & FLAG_START)))
       )*/
+#if WIN || LINUX || DARWIN
     if(ingame == 1 && !_pause && !_devconsole && !nopause && p_keys)
+#else
+    if(ingame == 1 && !_pause && !nopause && p_keys)
+#endif
     {
         if ( !(goto_mainmenu_flag&1) )
         {
@@ -35214,7 +35235,7 @@ void update(int ingame, int usevwait)
         is_dev_console_triggered &&
         is_dev_console_shouldbe_visible )
     {
-      printf("show dev's console\n");
+      fprintf(stdout, "show dev's console\n");
       sound_pause_music(1);
       sound_pause_sample(1);
       sound_play_sample(SAMPLE_PAUSE, 0, savedata.effectvol, savedata.effectvol, 100);
