@@ -1,6 +1,7 @@
 #include "devconsole.h"
 #include "openbor.h"
 #include "hankaku.h"
+#include "version.h"
 
 #define HISTORY_LINES 1000
 
@@ -143,8 +144,13 @@ static void printText(s_screen* screen, int bpp, int x, int y, int col, int back
  *
  * It truncate a line with LINE_BUFFER, then update next last to-be-used element index for
  * next round.
+ *
+ * Use this to add a single line into histline. If you have multiple lines to add, call this
+ * function multiple times.
+ *
+ * \param line a null-terminated string.
  */
-static void add_histline(const char* line)
+static void add_to_histline(const char* line)
 {
   if (line == NULL)
     return;
@@ -300,19 +306,12 @@ bool devconsole_control_update(Uint8 *keystate, const SDL_Event event)
           if(command && command[0])
           {
             // TODO: add more commands to support here
-            if(stricmp(command, "cmd1") == 0)
+            if(stricmp(command, "version") == 0)
             {
-#ifdef DEBUG
-              fprintf(stdout, "version command is issued\n");
-#endif
-              add_histline("11");
-            }
-            else if(stricmp(command, "cmd2") == 0)
-            {
-#ifdef DEBUG
-              fprintf(stdout, "version command is issued 2\n");
-#endif
-              add_histline("22");
+              char buf[LINE_BUFFER];
+              snprintf(buf, LINE_BUFFER, "OpenBOR v.%s.%s Build %d (%s)", VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD_INT, VERSION_COMMIT);
+
+              add_to_histline(buf);
             }
           }
         }
