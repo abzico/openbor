@@ -342,6 +342,10 @@ bool devconsole_control_update(Uint8 *keystate, const SDL_Event event)
                 playlevel(GET_ARG(1));
               }
             }
+            else
+            {
+              add_to_histline("command not recognized");
+            }
           }
         }
         
