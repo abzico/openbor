@@ -13,11 +13,11 @@
 function check_git {
 HOST_PLATFORM=$(uname -s)
 if [ `echo $HOST_PLATFORM | grep -o "windows"` ]; then
-  if [ ! -d "../tools/mingit/mingw32" ]; then
+  if [ ! -d "../../tools/mingit/mingw32" ]; then
     echo "-------------------------------------------------------"
     echo "           GIT - Not Found, Installing GIT!"
     echo "-------------------------------------------------------"
-    7za x -y ../tools/mingit/MinGit-2.21.0-32-bit.7z -o../tools/mingit/
+    7za x -y ../../tools/mingit/MinGit-2.21.0-32-bit.7z -o../../tools/mingit/
     echo
     echo "-------------------------------------------------------"
     echo "           GIT - Installation Has Completed!"
@@ -27,13 +27,13 @@ fi
 }
 
 function get_revnum {
-  if test -d "../.git" || test -d ".git"; then
+  if test -d "../../.git" || test -d ".git"; then
     VERSION_BUILD=`git rev-list --count HEAD`
     # get commit hash, 7 chars in length is enough, and still work when supply as URL on github.com
     VERSION_COMMIT=`git rev-parse HEAD | cut -c -7`
   else
-	VERSION_BUILD=0000
-	VERSION_COMMIT=0000000
+	  VERSION_BUILD=0000
+	  VERSION_COMMIT=0000000
   fi
 }
 
@@ -55,7 +55,7 @@ fi
 }
 
 function write_version {
-rm -rf version.h
+rm -rf ../version.h
 echo "/*
  * OpenBOR - http://www.ChronoCrash.com
  * -----------------------------------------------------------------------
@@ -71,17 +71,17 @@ echo "/*
 #define VERSION_MAJOR \"$VERSION_MAJOR\"
 #define VERSION_MINOR \"$VERSION_MINOR\"
 #define VERSION_BUILD \"$VERSION_BUILD\"
-#define VERSION_BUILD_INT $VERSION_BUILD" >> version.h
+#define VERSION_BUILD_INT $VERSION_BUILD" >> ../version.h
 
 if [ -z "${VERSION_COMMIT}" ]; then
   echo "#define VERSION \"v\"VERSION_MAJOR\".\"VERSION_MINOR\" Build \"VERSION_BUILD
 
-#endif" >> version.h
+#endif" >> ../version.h
 else
   echo "#define VERSION_COMMIT \"${VERSION_COMMIT}\"
 #define VERSION \"v\"VERSION_MAJOR\".\"VERSION_MINOR\" Build \"VERSION_BUILD\" (commit hash: \"VERSION_COMMIT\")\"
 
-#endif" >> version.h
+#endif" >> ../version.h
 fi
 
 rm -rf resources/meta.xml
@@ -176,8 +176,8 @@ function archive_release {
 #if test -n $TRIMMED_URL;  then
 #  TRIMMED_URL="svn"$TRIMMED_URL
 #fi
-#svn log  $TRIMMED_URL --verbose > ./releases/VERSION_INFO.txt
-7za a -t7z -mx9 -r -x!.svn "./releases/OpenBOR $VERSION.7z" ./releases/*
+#svn log  $TRIMMED_URL --verbose > ../releases/VERSION_INFO.txt
+7za a -t7z -mx9 -r -x!.svn "../releases/OpenBOR $VERSION.7z" ../releases/*
 }
 
 export LC_MESSAGES=en_US.UTF-8

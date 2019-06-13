@@ -20,11 +20,11 @@ export MAKEFLAGS=-j4
 function version {
   . ./version.sh
   make version
-  mkdir -p releases
-  cp README ./releases/README.txt
-  cp LICENSE ./releases/LICENSE.txt
-  cp COMPILING ./releases/COMPILING.txt
-  cp translation.txt ./releases/translation.txt
+  mkdir -p ../releases
+  cp ../README ../releases/README.txt
+  cp ../LICENSE ../releases/LICENSE.txt
+  cp ../COMPILING ../releases/COMPILING.txt
+  cp ../translation.txt ../releases/translation.txt
 }
 
 # CleanUp Releases
@@ -39,13 +39,13 @@ function distribute {
   echo ------------------------------------------------------
   echo
 
-  if ! test "releases/PSP/OpenBOR/EBOOT.PBP"; then
+  if ! test "../releases/PSP/OpenBOR/EBOOT.PBP"; then
     echo "PSP Platform Failed To Build!"
     exit 1
   fi
 
-if test -e "releases/WINDOWS/OpenBOR/OpenBOR.exe"; then
-    cd ../tools/borpak/source/
+if test -e "../releases/WINDOWS/OpenBOR/OpenBOR.exe"; then
+    cd ../../tools/borpak/source/
     . build.sh win
     cp borpak.exe ../../../engine/releases/WINDOWS/OpenBOR/
     cp ../scripts/packer.bat ../../../engine/releases/WINDOWS/OpenBOR/
@@ -55,16 +55,16 @@ if test -e "releases/WINDOWS/OpenBOR/OpenBOR.exe"; then
     echo "Windows Platform Failed To Build!"
     exit 1
   fi
-  if ! test -e "releases/WII/OpenBOR/boot.dol"; then
+  if ! test -e "../releases/WII/OpenBOR/boot.dol"; then
     echo "Wii Platform Failed To Build!"
     exit 1
   fi
-  if ! test -e "releases/OPENDINGUX/OpenBOR/OpenBOR.dge"; then
+  if ! test -e "../releases/OPENDINGUX/OpenBOR/OpenBOR.dge"; then
     echo "OpenDingux Platform Failed To Build!"
     exit 1
   fi
-  if test -e "releases/LINUX/OpenBOR/OpenBOR"; then
-    cd ../tools/borpak/source/
+  if test -e "../releases/LINUX/OpenBOR/OpenBOR"; then
+    cd ../../tools/borpak/source/
     . build.sh lin
     cp borpak ../../../engine/releases/LINUX/OpenBOR/
     cp ../scripts/packer ../../../engine/releases/LINUX/OpenBOR/
@@ -76,8 +76,8 @@ if test -e "releases/WINDOWS/OpenBOR/OpenBOR.exe"; then
       exit 1
     fi
   fi
-  if test -e "releases/DARWIN/OpenBOR.app/Contents/MacOS/OpenBOR"; then
-    cd ../tools/borpak/source/
+  if test -e "../releases/DARWIN/OpenBOR.app/Contents/MacOS/OpenBOR"; then
+    cd ../../tools/borpak/source/
     . build.sh mac
     cp borpak ../../../engine/releases/DARWIN/OpenBOR.app/Contents/Resources/
     cp ../scripts/packer ../../../engine/releases/DARWIN/OpenBOR.app/Contents/Resources/
@@ -94,8 +94,8 @@ if test -e "releases/WINDOWS/OpenBOR/OpenBOR.exe"; then
     if test -n $TRIMMED_URL;  then
       TRIMMED_URL="svn"$TRIMMED_URL
     fi
-    svn log $TRIMMED_URL --verbose > ./releases/VERSION_INFO.txt
-    7za a -t7z -mx9 -r -x!.svn "./releases/OpenBOR $VERSION.7z" ./releases/*
+    svn log $TRIMMED_URL --verbose > ../releases/VERSION_INFO.txt
+    7za a -t7z -mx9 -r -x!.svn "../releases/OpenBOR $VERSION.7z" ../releases/*
   fi
   echo
 }
@@ -107,24 +107,24 @@ function psp {
   if test $PSPDEV; then
     make clean BUILD_PSP=1
     make BUILD_PSP=1
-    if test -f "./EBOOT.PBP"; then
-      if test ! -e "./releases/PSP"; then
-        mkdir ./releases/PSP
-        mkdir ./releases/PSP/OpenBOR
-        mkdir ./releases/PSP/OpenBOR/Images
-        mkdir ./releases/PSP/OpenBOR/Logs
-        mkdir ./releases/PSP/OpenBOR/Paks
-        mkdir ./releases/PSP/OpenBOR/Saves
-        mkdir ./releases/PSP/OpenBOR/Modules
+    if test -f "EBOOT.PBP"; then
+      if test ! -e "../releases/PSP"; then
+        mkdir ../releases/PSP
+        mkdir ../releases/PSP/OpenBOR
+        mkdir ../releases/PSP/OpenBOR/Images
+        mkdir ../releases/PSP/OpenBOR/Logs
+        mkdir ../releases/PSP/OpenBOR/Paks
+        mkdir ../releases/PSP/OpenBOR/Saves
+        mkdir ../releases/PSP/OpenBOR/Modules
       fi
-      mv EBOOT.PBP ./releases/PSP/OpenBOR/
-      mv OpenBOR.elf ./releases/PSP/OpenBOR/Modules/
-      cp ./psp/dvemgr/dvemgr.prx ./releases/PSP/OpenBOR/Modules/
-      cp ./psp/kernel/kernel.prx ./releases/PSP/OpenBOR/Modules/
-      cp ./psp/control/control.prx ./releases/PSP/OpenBOR/Modules/
-      cp ./psp/exception/exception.prx ./releases/PSP/OpenBOR/Modules/
-      cp ./resources/OpenBOR_Menu_480x272_Sony.png ./releases/PSP/OpenBOR/Images/Menu.png
-      cp ./resources/OpenBOR_Logo_480x272.png ./releases/PSP/OpenBOR/Images/Loading.png
+      mv EBOOT.PBP ../releases/PSP/OpenBOR/
+      mv OpenBOR.elf ../releases/PSP/OpenBOR/Modules/
+      cp ../psp/dvemgr/dvemgr.prx ../releases/PSP/OpenBOR/Modules/
+      cp ../psp/kernel/kernel.prx ../releases/PSP/OpenBOR/Modules/
+      cp ../psp/control/control.prx ../releases/PSP/OpenBOR/Modules/
+      cp ../psp/exception/exception.prx ../releases/PSP/OpenBOR/Modules/
+      cp ../resources/OpenBOR_Menu_480x272_Sony.png ../releases/PSP/OpenBOR/Images/Menu.png
+      cp ../resources/OpenBOR_Logo_480x272.png ../releases/PSP/OpenBOR/Images/Loading.png
     fi
     make clean BUILD_PSP=1
   fi
@@ -137,11 +137,11 @@ function vita {
   if test $VITASDK; then
     make clean BUILD_VITA=1
     make BUILD_VITA=1
-    if test -f "./OpenBOR.vpk"; then
-      if test ! -e "./releases/VITA"; then
-        mkdir ./releases/VITA
+    if test -f "OpenBOR.vpk"; then
+      if test ! -e "../releases/VITA"; then
+        mkdir ../releases/VITA
       fi
-      mv OpenBOR.vpk ./releases/VITA/
+      mv OpenBOR.vpk ../releases/VITA/
     fi
     make clean BUILD_VITA=1
   fi
@@ -160,17 +160,17 @@ function linux {
       export NO_RAM_DEBUGGER=1
     fi
     make BUILD_LINUX=1
-    if test -f "./OpenBOR"; then
-      if test ! -e "./releases/$3"; then
-        mkdir ./releases/$3
-        mkdir ./releases/$3/OpenBOR
-        mkdir ./releases/$3/OpenBOR/Logs
-        mkdir ./releases/$3/OpenBOR/Paks
-        mkdir ./releases/$3/OpenBOR/Saves
-        mkdir ./releases/$3/OpenBOR/ScreenShots
+    if test -f "OpenBOR"; then
+      if test ! -e "../releases/$3"; then
+        mkdir ../releases/$3
+        mkdir ../releases/$3/OpenBOR
+        mkdir ../releases/$3/OpenBOR/Logs
+        mkdir ../releases/$3/OpenBOR/Paks
+        mkdir ../releases/$3/OpenBOR/Saves
+        mkdir ../releases/$3/OpenBOR/ScreenShots
       fi
-      mv OpenBOR ./releases/$3/OpenBOR
-      echo "moved binary to ./releases/$3/ !"
+      mv OpenBOR ../releases/$3/OpenBOR
+      echo "moved binary to ../releases/$3/ !"
     fi
     if [[ ! $BUILD_DEBUG ]] ; then
       make clean BUILD_LINUX=1
@@ -213,23 +213,23 @@ function windows {
   if test $WINDEV; then
     make clean BUILD_WIN=1
 		#first remove old resource file and update with build number from build_number.h.
-		if test -e "resources/OpenBOR.res"; then
-		rm "resources/OpenBOR.res";
-		windres.exe resources/OpenBOR.rc -o resources/OpenBOR.res -O coff
+		if test -e "../resources/OpenBOR.res"; then
+		rm "../resources/OpenBOR.res";
+		windres.exe ../resources/OpenBOR.rc -o ../resources/OpenBOR.res -O coff
 		else
-		windres.exe resources/OpenBOR.rc -o resources/OpenBOR.res -O coff
+		windres.exe ../resources/OpenBOR.rc -o ../resources/OpenBOR.res -O coff
 		fi
     make BUILD_WIN=1
     if test -f "./OpenBOR.exe"; then
-      if test ! -e "./releases/WINDOWS" ; then
-        mkdir ./releases/WINDOWS
-        mkdir ./releases/WINDOWS/OpenBOR
-        mkdir ./releases/WINDOWS/OpenBOR/Logs
-        mkdir ./releases/WINDOWS/OpenBOR/Paks
-        mkdir ./releases/WINDOWS/OpenBOR/Saves
-        mkdir ./releases/WINDOWS/OpenBOR/ScreenShots
+      if test ! -e "../releases/WINDOWS" ; then
+        mkdir ../releases/WINDOWS
+        mkdir ../releases/WINDOWS/OpenBOR
+        mkdir ../releases/WINDOWS/OpenBOR/Logs
+        mkdir ../releases/WINDOWS/OpenBOR/Paks
+        mkdir ../releases/WINDOWS/OpenBOR/Saves
+        mkdir ../releases/WINDOWS/OpenBOR/ScreenShots
       fi
-      mv OpenBOR.exe ./releases/WINDOWS/OpenBOR
+      mv OpenBOR.exe ../releases/WINDOWS/OpenBOR
     fi
     make clean BUILD_WIN=1
   fi
@@ -243,17 +243,17 @@ function wii {
     make clean BUILD_WII=1
     make BUILD_WII=1
     if test -f "./boot.dol"; then
-      if test ! -e "./releases/WII" ; then
-        mkdir ./releases/WII
-        mkdir ./releases/WII/OpenBOR
-        mkdir ./releases/WII/OpenBOR/Logs
-        mkdir ./releases/WII/OpenBOR/Paks
-        mkdir ./releases/WII/OpenBOR/Saves
-        mkdir ./releases/WII/OpenBOR/ScreenShots
+      if test ! -e "../releases/WII" ; then
+        mkdir ../releases/WII
+        mkdir ../releases/WII/OpenBOR
+        mkdir ../releases/WII/OpenBOR/Logs
+        mkdir ../releases/WII/OpenBOR/Paks
+        mkdir ../releases/WII/OpenBOR/Saves
+        mkdir ../releases/WII/OpenBOR/ScreenShots
       fi
-      mv boot.dol ./releases/WII/OpenBOR/
-      cp ./resources/meta.xml ./releases/WII/OpenBOR
-      cp ./resources/OpenBOR_Icon_128x48.png ./releases/WII/OpenBOR/icon.png
+      mv boot.dol ../releases/WII/OpenBOR/
+      cp ../resources/meta.xml ../releases/WII/OpenBOR
+      cp ../resources/OpenBOR_Icon_128x48.png ../releases/WII/OpenBOR/icon.png
     fi
     make clean BUILD_WII=1
   fi
@@ -267,18 +267,18 @@ function darwin {
     make clean BUILD_DARWIN=1
     make BUILD_DARWIN=1
     if test -f "./OpenBOR"; then
-      if test ! -e "./releases/DARWIN"; then
-        mkdir ./releases/DARWIN
-        mkdir ./releases/DARWIN/OpenBOR.app
-        mkdir ./releases/DARWIN/OpenBOR.app/Contents
-        mkdir ./releases/DARWIN/OpenBOR.app/Contents/MacOS
-        mkdir ./releases/DARWIN/OpenBOR.app/Contents/Resources
-        mkdir ./releases/DARWIN/OpenBOR.app/Contents/Libraries
+      if test ! -e "../releases/DARWIN"; then
+        mkdir ../releases/DARWIN
+        mkdir ../releases/DARWIN/OpenBOR.app
+        mkdir ../releases/DARWIN/OpenBOR.app/Contents
+        mkdir ../releases/DARWIN/OpenBOR.app/Contents/MacOS
+        mkdir ../releases/DARWIN/OpenBOR.app/Contents/Resources
+        mkdir ../releases/DARWIN/OpenBOR.app/Contents/Libraries
       fi
-      mv OpenBOR ./releases/DARWIN/OpenBOR.app/Contents/MacOS
-      cp ./resources/PkgInfo ./releases/DARWIN/OpenBOR.app/Contents
-      cp ./resources/Info.plist ./releases/DARWIN/OpenBOR.app/Contents
-      cp ./resources/OpenBOR.icns ./releases/DARWIN/OpenBOR.app/Contents/Resources
+      mv OpenBOR ../releases/DARWIN/OpenBOR.app/Contents/MacOS
+      cp ../resources/PkgInfo ../releases/DARWIN/OpenBOR.app/Contents
+      cp ../resources/Info.plist ../releases/DARWIN/OpenBOR.app/Contents
+      cp ../resources/OpenBOR.icns ../releases/DARWIN/OpenBOR.app/Contents/Resources
       if [ "${DWNDEV}" != "/opt/mac" ]; then
         ./darwin.sh
       fi
@@ -290,12 +290,12 @@ function darwin {
 # Android Compile
 function android {
   export PATH=$OLD_PATH
-    if test -f "./android/app/build/outputs/apk/debug/OpenBOR.apk"; then
-      if test ! -e "./releases/Android/"; then
-		rm -rf ./releases/ANDROID
-        mkdir ./releases/ANDROID
+    if test -f "../android/app/build/outputs/apk/debug/OpenBOR.apk"; then
+      if test ! -e "../releases/Android/"; then
+		    rm -rf ../releases/ANDROID
+        mkdir ../releases/ANDROID
       fi
-      cp ./android/app/build/outputs/apk/debug/OpenBOR.apk ./releases/ANDROID
+      cp ../android/app/build/outputs/apk/debug/OpenBOR.apk ../releases/ANDROID
 		echo "Android Build Copied!"
     fi
 }

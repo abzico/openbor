@@ -13,7 +13,7 @@
 export BUILDBATCH=1
 export HOST_PLATFORM=$(uname -s)
 export MACHINENAME=$(uname -m)
-export TOOLS=../tools/bin:../tools/7-Zip:../tools/svn/bin
+export TOOLS=../../tools/bin:../../tools/7-Zip:../../tools/svn/bin
 
 if [ `echo $MACHINENAME | grep -o "ppc64"` ]; then
   export MACHINE=__ppc__
@@ -45,17 +45,17 @@ case $1 in
      export PSPDEV=/usr/local/pspdev
      export PATH=$PATH:$PSPDEV/bin
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/psp-sdk/bin" ]; then
+     if [ ! -d "../../tools/psp-sdk/bin" ]; then
        echo "-------------------------------------------------------"
        echo "        PSP SDK - Not Found, Installing SDK!"
        echo "-------------------------------------------------------"
-       ../tools/7-Zip/7za.exe x -y ../tools/psp-sdk/psp-sdk.7z -o../tools/psp-sdk/
+       ../../tools/7-Zip/7za.exe x -y ../../tools/psp-sdk/psp-sdk.7z -o../../tools/psp-sdk/
        echo
        echo "-------------------------------------------------------"
        echo "        PSP SDK - Installation Has Completed!"
        echo "-------------------------------------------------------"
      fi
-       export PSPDEV=../tools/psp-sdk
+       export PSPDEV=../../tools/psp-sdk
        export PATH=$TOOLS:$PSPDEV/bin
        HOST_PLATFORM="SVN";
    fi
@@ -114,18 +114,18 @@ case $1 in
      export SDKPATH=/opt/open2x/gcc-4.1.1-glibc-2.3.6/arm-open2x-linux
      export PATH=$PATH:$GP2XDEV
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/gp2x-sdk/bin" ]; then
+     if [ ! -d "../../tools/gp2x-sdk/bin" ]; then
        echo "-------------------------------------------------------"
        echo "         GP2X SDK - Not Found, Installing SDK!"
        echo "-------------------------------------------------------"
-       ../tools/7-Zip/7za.exe x -y ../tools/gp2x-sdk/gp2x-sdk.7z -o../tools/gp2x-sdk/
+       ../../tools/7-Zip/7za.exe x -y ../../tools/gp2x-sdk/gp2x-sdk.7z -o../../tools/gp2x-sdk/
        echo
        echo "-------------------------------------------------------"
        echo "         GP2X SDK - Installation Has Completed!"
        echo "-------------------------------------------------------"
      fi
-     export GP2XDEV=../tools/gp2x-sdk/bin
-     export SDKPATH=../tools/gp2x-sdk/arm-open2x-linux
+     export GP2XDEV=../../tools/gp2x-sdk/bin
+     export SDKPATH=../../tools/gp2x-sdk/arm-open2x-linux
      export PATH=$TOOLS:$GP2XDEV
      HOST_PLATFORM="SVN"
    fi
@@ -210,18 +210,18 @@ case $1 in
      export EXTENSION=.exe
      export PATH=$TOOLS:$WINDEV:$PATH
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/win-sdk/bin" ]; then
+     if [ ! -d "../../tools/win-sdk/bin" ]; then
        echo "-------------------------------------------------------"
        echo "      Windows SDK - Not Found, Installing SDK!"
        echo "-------------------------------------------------------"
-       ../tools/7-Zip/7za.exe x -y ../tools/win-sdk/win-sdk.7z -o../tools/win-sdk/
+       ../../tools/7-Zip/7za.exe x -y ../../tools/win-sdk/win-sdk.7z -o../../tools/win-sdk/
        echo
        echo "-------------------------------------------------------"
        echo "      Windows SDK - Installation Has Completed!"
        echo "-------------------------------------------------------"
      fi
-     export WINDEV=../tools/win-sdk/bin
-     export SDKPATH=../tools/win-sdk
+     export WINDEV=../../tools/win-sdk/bin
+     export SDKPATH=../../tools/win-sdk
      export EXTENSION=.exe
      export PATH=$TOOLS:$WINDEV
      HOST_PLATFORM="SVN";
@@ -249,11 +249,11 @@ case $1 in
    elif test -e "/opt/dcdev/kos"; then
      . /opt/dcdev/kos/environ.sh
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/dc-sdk/kos" ]; then
+     if [ ! -d "../../tools/dc-sdk/kos" ]; then
         echo "-------------------------------------------------------"
         echo "     Dreamcast SDK - Not Found, Installing SDK!"
         echo "-------------------------------------------------------"
-        ../tools/7-Zip/7za.exe x -y ../tools/dc-sdk/kos-svn-698.7z -o../tools/dc-sdk/
+        ../../tools/7-Zip/7za.exe x -y ../../tools/dc-sdk/kos-svn-698.7z -o../../tools/dc-sdk/
         echo
         echo "-------------------------------------------------------"
         echo "     Dreamcast SDK - Installation Has Completed!"
@@ -261,7 +261,7 @@ case $1 in
      fi
      HOST_PLATFORM="SVN";
      export PATH=$TOOLS
-     . ../tools/dc-sdk/kos/environ.sh     
+     . ../../tools/dc-sdk/kos/environ.sh     
    fi
    if test $KOS_BASE; then
      echo "-------------------------------------------------------"
@@ -290,18 +290,18 @@ case $1 in
      export DEVKITPPC=$DEVKITPRO/devkitPPC
      export PATH=$PATH:$DEVKITPPC/bin
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/devkitpro/devkitPPC" ]; then
+     if [ ! -d "../../tools/devkitpro/devkitPPC" ]; then
         echo "-------------------------------------------------------"
         echo "         WII SDK - Not Found, Installing SDK!"
         echo "-------------------------------------------------------"
-        ../tools/7-Zip/7za.exe x -y ../tools/devkitpro/devkitpro.7z -o../tools/devkitpro/
+        ../../tools/7-Zip/7za.exe x -y ../../tools/devkitpro/devkitpro.7z -o../../tools/devkitpro/
         echo
         echo "-------------------------------------------------------"
         echo "         WII SDK - Installation Has Completed!"
         echo "-------------------------------------------------------"
      fi
      HOST_PLATFORM="SVN";
-     export DEVKITPRO=../tools/devkitpro
+     export DEVKITPRO=../../tools/devkitpro
      export DEVKITPPC=$DEVKITPRO/devkitPPC
      export PATH=$TOOLS:$DEVKITPPC/bin
    fi
@@ -352,18 +352,18 @@ case $1 in
      export PREFIX=arm-openwiz-linux-gnu-
      export PATH=$PATH:$WIZDEV
    elif [ `echo $HOST_PLATFORM | grep -E "windows|CYGWIN"` ]; then
-     if [ ! -d "../tools/wiz-sdk/tools" ]; then
+     if [ ! -d "../../tools/wiz-sdk/tools" ]; then
        echo "-------------------------------------------------------"
        echo "         WIZ SDK - Not Found, Installing SDK!"
        echo "-------------------------------------------------------"
-       ../tools/7-Zip/7za.exe x -y ../tools/wiz-sdk/wiz-sdk.7z -o../tools/wiz-sdk/
+       ../../tools/7-Zip/7za.exe x -y ../../tools/wiz-sdk/wiz-sdk.7z -o../../tools/wiz-sdk/
        echo
        echo "-------------------------------------------------------"
        echo "         WIZ SDK - Installation Has Completed!"
        echo "-------------------------------------------------------"
      fi
-     export WIZDEV=../tools/wiz-sdk/tools/gcc-4.0.2-glibc-2.3.6/arm-linux/bin
-     export SDKPATH=../tools/wiz-sdk/DGE
+     export WIZDEV=../../tools/wiz-sdk/tools/gcc-4.0.2-glibc-2.3.6/arm-linux/bin
+     export SDKPATH=../../tools/wiz-sdk/DGE
      export PREFIX=arm-linux-
      export EXTENSION=.exe
      export PATH=$TOOLS:$WIZDEV

@@ -32,7 +32,7 @@ lib_copy+=(`find ${DWNDEV}/lib -name "libz.[0-9].dylib"`)
 lib_copy+=(`find ${DWNDEV}/lib -name "libpng[0-9][0-9].dylib"`)
 
 for ((i = 0; i < ${#lib_copy[*]}; i = $i + 1)); do
-  cp ${lib_copy[i]} ./releases/DARWIN/OpenBOR.app/Contents/Libraries
+  cp ${lib_copy[i]} ../releases/DARWIN/OpenBOR.app/Contents/Libraries
 done
 
 # Order and pairing is critical!!!
@@ -52,7 +52,7 @@ for ((i = 0; i < ${#lib_ref_patch[*]}; i = $i + 2)); do
   ${PREFIX}install_name_tool \
   -change ${lib_ref_patch[i]} \
   @executable_path/../Libraries/$(basename ${lib_ref_patch[i]}) \
-  releases/DARWIN/OpenBOR.app/Contents/Libraries/$(basename ${lib_ref_patch[i+1]})
+  ../releases/DARWIN/OpenBOR.app/Contents/Libraries/$(basename ${lib_ref_patch[i+1]})
 
 done
 
@@ -63,7 +63,7 @@ for ((i = 0; i < ${#lib_ref_patch[*]}; i = $i + 1)); do
   ${PREFIX}install_name_tool \
   -change ${lib_ref_patch[i]} \
   @executable_path/../Libraries/$(basename ${lib_ref_patch[i]}) \
-  releases/DARWIN/OpenBOR.app/Contents/MacOS/OpenBOR
+  ../releases/DARWIN/OpenBOR.app/Contents/MacOS/OpenBOR
 
 done
 

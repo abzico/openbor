@@ -506,15 +506,15 @@
     <None Include="..\..\source\gfxlib\hq2x16mmx.asm">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\build.sh" />
-    <None Include="..\..\darwin.sh" />
-    <None Include="..\..\environ.sh" />
-    <None Include="..\..\fixindentation.sh" />
-    <None Include="..\..\fixtrailingwhitespace.sh" />
-    <None Include="..\..\version.sh" />
+    <None Include="..\..\build-scripts\build.sh" />
+    <None Include="..\..\build-scripts\darwin.sh" />
+    <None Include="..\..\build-scripts\environ.sh" />
+    <None Include="..\..\build-scripts\fixindentation.sh" />
+    <None Include="..\..\build-scripts\fixtrailingwhitespace.sh" />
+    <None Include="..\..\build-scripts\version.sh" />
     <None Include="..\..\source\preprocessorlib\test\build.sh" />
     <None Include="..\..\source\preprocessorlib\test\tokendiff.sh" />
-    <None Include="..\..\Makefile" />
+    <None Include="..\..\build-scripts\Makefile" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\openbor.h">
